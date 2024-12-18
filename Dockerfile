@@ -1,15 +1,18 @@
-# syntax=docker/dockerfile:1
+# Use the official Python image as a base
+FROM python:3.9-slim
 
-FROM node:12.18.1
-ENV NODE_ENV=production
-
+# Set the working directory in the container
 WORKDIR /app
 
-COPY ["package.json", "package-lock.json*", "./"]
+# Copy the requirements.txt file and install dependencies
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
 
-RUN npm install --production
-
+# Copy the rest of the application files to the container
 COPY . .
 
-EXPOSE 8080
-CMD [ "node", "server.js" ]
+# Expose the port that Streamlit runs on
+EXPOSE 8501
+
+# Command to run the Streamlit application
+CMD ["streamlit", "run", "app.py"]
